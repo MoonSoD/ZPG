@@ -1,5 +1,5 @@
 #include "ForestScene.h"
-#include "../models/SquareModel.h"
+#include "../models/PlainModel.h"
 #include "../models/TreeModel.h"
 #include "../models/BushModel.h"
 #include "../transformations/TransformBuilder.h"
@@ -12,6 +12,8 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	auto shader = new ShaderProgram("src/shaders/PhongVertexShader.glsl", "src/shaders/PhongFragmentShaderMultiple.glsl");
 	shader->setCamera(this->getCamera());
 
+	auto texShader = new ShaderProgram("src/shaders/TextureVertexShader.glsl", "src/shaders/TextureFragmentShader.glsl");
+	texShader->setCamera(this->getCamera());
 
 	// Light* light = new Light(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.385, 0.647, 0.812));
 	// this->setLight(light);
@@ -63,7 +65,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	for (int i = 0; i < numTrees; ++i) {
 		float x = xDist(rng);
 		float z = zDist(rng);
-		float y = -1.4f;
+		float y = 0;
 		float scale = treeScaleDist(rng);
 		float rotationY = rotationDist(rng);
 
@@ -83,7 +85,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	for (int i = 0; i < numBushes; ++i) {
 		float x = xDist(rng);
 		float z = zDist(rng);
-		float y = -1.4f;
+		float y = 0;
 		float scale = bushScaleDist(rng);
 		float rotationY = rotationDist(rng);
 
@@ -101,12 +103,11 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	}
 
 	objects["ground"] = new DrawableObject(
-		new SquareModel(),
-		shader,
+		new PlainModel(),
+		texShader,
 		TransformBuilder()
-		.translate(0, -1.5f, 0)
-		.scale(200.0f)
-		.rotate(1.57f, 0, 0)
+		.translate(0, 0, 0)
+		.scale(50.0f)
 		.build()
 	);
 
@@ -121,25 +122,21 @@ void ForestScene::render() {
 
     this->controller->processInput();
 
-    for (auto& light : lights) {
-		if (light->getType() != 1) {
-			continue;
-		}
+    // for (auto& light : lights) {
+	// 	if (light->getType() != 1) {
+	// 		continue;
+	// 	}
 
-        float randomX = ((std::rand() % 100) / 100.0f) - 0.5;  
-        float randomY = ((std::rand() % 100) / 100.0f) - 0.5; 
-        float randomZ = ((std::rand() % 100) / 100.0f) - 0.5; 
-	
-        glm::vec3 currentPosition = light->getPosition();
+    //     auto currentPosition = light->getPosition();
 
-        glm::vec3 newPosition = glm::vec3(
-            currentPosition.x + randomX * 0.2f,
-            currentPosition.y + randomY * 0.2f,
-			currentPosition.z + randomZ * 0.2f
-        );
+    //     glm::vec3 newPosition = glm::vec3(
+    //         currentPosition.x + 1.0f,
+    //         currentPosition.y,
+	// 		currentPosition.z
+    //     );
 
-        light->setPosition(newPosition);
-    } 
+    //     light->setPosition(newPosition);
+    // } 
 
 	rotation += 0.001f;
 
