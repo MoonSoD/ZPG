@@ -2,6 +2,7 @@
 #include "../models/PlainModel.h"
 #include "../models/TreeModel.h"
 #include "../models/BushModel.h"
+#include "../models/Skybox.h"
 #include "../transformations/TransformBuilder.h"
 
 #define _USE_MATH_DEFINES
@@ -14,6 +15,10 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 
 	auto texShader = new ShaderProgram("src/shaders/TextureVertexShader.glsl", "src/shaders/TextureFragmentShader.glsl");
 	texShader->setCamera(this->getCamera());
+
+	auto skyShader = new ShaderProgram("src/shaders/TextureVertexShader.glsl", "src/shaders/SkyboxFragmentShader.glsl");
+	skyShader->setCamera(this->getCamera());
+
 
 	// Light* light = new Light(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.385, 0.647, 0.812));
 	// this->setLight(light);
@@ -102,16 +107,24 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		);
 	}
 
-	objects["ground"] = new DrawableObject(
-		new PlainModel(),
-		texShader,
+	// objects["ground"] = new DrawableObject(
+	// 	new PlainModel(),
+	// 	texShader,
+	// 	TransformBuilder()
+	// 	.translate(0, 0, 0)
+	// 	.scale(50.0f)
+	// 	.build()
+	// );
+
+	objects["skybox"] = new DrawableObject(
+		new Skybox(),
+		skyShader,
 		TransformBuilder()
-		.translate(0, 0, 0)
 		.scale(50.0f)
 		.build()
 	);
 
-	 this->setLight(light);
+	this->setLight(light);
 	// this->setLight(light2);
 	this->setLight(light3);
 	// light->setPosition(glm::vec3(0.0, 0.0, 0.0));

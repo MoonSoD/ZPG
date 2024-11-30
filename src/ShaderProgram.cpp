@@ -4,6 +4,9 @@
 ShaderProgram::ShaderProgram(const char* vertexShaderFile, const char* fragmentShaderFile) {
 	ShaderLoader* loader = new ShaderLoader();
 	id = loader->loadShader(vertexShaderFile, fragmentShaderFile);
+
+	GLint uniformID = glGetUniformLocation(id, "textureUnitID");
+	glUniform1i(uniformID, 0);
 }
 
 void ShaderProgram::useProgram() {
