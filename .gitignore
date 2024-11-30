@@ -1,6 +1,10 @@
 .vscode
 CMakeFiles
+CMakeCache.txt
+Makefile
 cv7
+
+.DS_Store
 
 libSOIL.a
 zpgproj
