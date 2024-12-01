@@ -20,7 +20,7 @@ struct Light {
     float outerConeAngle;  
 };
 
-uniform Light light[3];  
+uniform Light light[4];  
 
 uniform vec3 viewPosition; 
 uniform vec3 cameraTarget; 
@@ -41,7 +41,7 @@ void main(void) {
 
     vec3 lightVector;
 
-    for (int i = 0; i < 3; i++) {  
+    for (int i = 0; i < 4; i++) {  
         Light currentLight = light[i];
 
         float attenuation = 1.0;

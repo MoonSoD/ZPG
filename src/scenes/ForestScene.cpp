@@ -60,6 +60,28 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
         glm::radians(27.5)
     );
 
+	auto firefly1 = new Light(
+		1,
+        glm::vec3(0, 5, 0),
+        glm::vec3(1, 1, 1),
+        glm::vec3(0.5, 0.5, 0.5),
+        glm::vec3(1, 1, 1),
+        glm::vec3(1, 1, 1),
+        glm::vec3(0.385, 0.647, 0.812),
+        glm::vec3(0, 0, 0)
+    );
+
+	auto firefly2 = new Light(
+		1,
+        glm::vec3(20, 5, 0),
+        glm::vec3(1, 1, 1),
+        glm::vec3(0.5, 0.5, 0.5),
+        glm::vec3(1, 1, 1),
+        glm::vec3(1, 1, 1),
+        glm::vec3(0.385, 0.647, 0.812),
+        glm::vec3(0, 0, 0)
+    );
+
 	auto pointLight = new PointLight(
         glm::vec3(0, 0, 0),
         glm::vec3(0, 0, 0),
@@ -168,7 +190,8 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	);
 
 	// this->setLight(pointLight);
-
+	this->setLight(firefly1);
+	this->setLight(firefly2);
 	this->setLight(light);
 	// this->setLight(light2);
 	this->setLight(light3);
@@ -179,6 +202,25 @@ void ForestScene::render() {
 	recalculateCamera();
 
     this->controller->processInput();
+
+	for (auto& light : lights) {
+		if (light->getType() != 1) {
+			continue;
+		}
+
+        float randomX = ((std::rand() % 100) / 100.0f) - 0.5;  
+        float randomZ = ((std::rand() % 100) / 100.0f) - 0.5; 
+	
+        glm::vec3 currentPosition = light->getPosition();
+
+        glm::vec3 newPosition = glm::vec3(
+            currentPosition.x + randomX * 1.2f,
+            currentPosition.y,
+			currentPosition.z + randomZ * 1.2f
+        );
+
+        light->setPosition(newPosition);
+    } 
 
 	rotation += 0.001f;
 
