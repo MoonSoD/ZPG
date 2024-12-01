@@ -29,6 +29,10 @@ uniform vec3 objectColor;
 
 uniform mat4 viewMatrix;
 
+uniform sampler2D textureUnitID;
+
+in vec2 uv;
+
 void main(void) {
     vec3 ambient = vec3(0.0);
     vec3 diffuse = vec3(0.0);
@@ -37,7 +41,7 @@ void main(void) {
 
     vec3 lightVector;
 
-    for (int i = 0; i < 3; i++) {  
+    for (int i = 0; i < 5; i++) {  
         Light currentLight = light[i];
 
         float attenuation = 1.0;
@@ -87,6 +91,12 @@ void main(void) {
     }
 
     finalColor = ambient + diffuse + specular;
-
-    out_Color = vec4(finalColor, 1.0);
+    if (length(uv) > 0.0) {
+        // If UVs are present, sample the texture
+        vec4 textureColor = texture(textureUnitID, uv);
+        out_Color = vec4(textureColor.rgb * finalColor, textureColor.a); 
+    } else {
+        // If no texture is present, use the calculated lighting color
+        out_Color = vec4(finalColor, 1.0);
+    }
 }

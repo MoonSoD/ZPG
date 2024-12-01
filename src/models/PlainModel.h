@@ -21,16 +21,15 @@ public:
 		glBindVertexArray(0);
 
 		glActiveTexture(GL_TEXTURE0);
-		GLuint image = SOIL_load_OGL_texture("./src/textures/grass.png", SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-		if (image == NULL) {
+		texture = SOIL_load_OGL_texture("./src/textures/grass.png", SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+		if (texture == NULL) {
 			std::cout << "An error occurred while loading image." << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		glBindTexture(GL_TEXTURE_2D, image);
-
 	}
 
 	void draw() override {
+		glBindTexture(GL_TEXTURE_2D, texture);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 };

@@ -59,6 +59,10 @@ file(GLOB SOIL_SOURCES
     ${CMAKE_SOURCE_DIR}/lib/soil/src/stb_image_aug.c
 )
 
+find_path(ASSIMP_INCLUDE_DIR assimp/Importer.hpp HINTS ${HOMEBREW_PREFIX}/include)
+find_library(ASSIMP_LIB NAMES assimp HINTS ${HOMEBREW_PREFIX}/lib)
+
+
 include_directories(./lib/soil/include)
 add_library(SOIL STATIC ${SOIL_SOURCES})
 
@@ -110,6 +114,7 @@ target_link_libraries(zpgproj
         ${GLFW_LIB}
         ${GLEW_LIB}
         SOIL
+        ${ASSIMP_LIB}
         "-framework Cocoa"
         "-framework IOKit"
         "-framework CoreVideo"

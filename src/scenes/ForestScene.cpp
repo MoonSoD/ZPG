@@ -3,6 +3,7 @@
 #include "../models/TreeModel.h"
 #include "../models/BushModel.h"
 #include "../models/Skybox.h"
+#include "../models/HouseModel.h"
 #include "../transformations/TransformBuilder.h"
 
 #define _USE_MATH_DEFINES
@@ -18,6 +19,9 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 
 	auto skyShader = new ShaderProgram("src/shaders/SkyboxVertexShader.glsl", "src/shaders/SkyboxFragmentShader.glsl");
 	skyShader->setCamera(this->getCamera());
+
+	auto modelShader = new ShaderProgram("src/shaders/ModelVertexShader.glsl", "src/shaders/ModelFragmentShader.glsl");
+	modelShader->setCamera(this->getCamera());
 
 
 	// Light* light = new Light(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.385, 0.647, 0.812));
@@ -112,18 +116,25 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 			.rotate(0, rotationY, 0)
 			.build()
 		);
+
 	}
+
+	objects["house"] = new DrawableObject(
+		new HouseModel(),
+		shader,
+		TransformBuilder()
+		.build()
+	);
+
 
 	objects["ground"] = new DrawableObject(
 		new PlainModel(),
-		texShader,
+		shader,
 		TransformBuilder()
 		.translate(0, 0, 0)
 		.scale(50.0f)
 		.build()
 	);
-
-
 
 	this->setLight(light);
 	// this->setLight(light2);

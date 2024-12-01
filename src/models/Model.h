@@ -8,16 +8,18 @@ class Model
 protected:
 	GLuint VBO = 0;
 	GLuint VAO = 0;
+	GLuint texture = 0;
 
+	std::tuple<GLuint, int> modelLoaderResult;
 public:
 
 	Model() {
+		glGenVertexArrays(1, &VAO); //generate the VAO
+		glBindVertexArray(VAO); //bind the VAO
 		glGenBuffers(1, &VBO); // generate the VBO
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 		//Vertex Array Object (VAO)
-		glGenVertexArrays(1, &VAO); //generate the VAO
-		glBindVertexArray(VAO); //bind the VAO
 		glEnableVertexAttribArray(0); //enable vertex attributes
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	}
