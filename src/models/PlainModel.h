@@ -21,7 +21,7 @@ public:
 		glBindVertexArray(0);
 
 		glActiveTexture(GL_TEXTURE0);
-		GLuint image = SOIL_load_OGL_texture("/Users/stefanmelicher/Documents/School/ZPG/zpg_project/src/textures/grass.png", SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+		GLuint image = SOIL_load_OGL_texture("./src/textures/grass.png", SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 		if (image == NULL) {
 			std::cout << "An error occurred while loading image." << std::endl;
 			exit(EXIT_FAILURE);

@@ -8,7 +8,7 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
 
     glfwSetKeyCallback(window, [](GLFWwindow* w, int key, int scancode, int action, int mod) {
         Controller* controller = static_cast<Controller*>(glfwGetWindowUserPointer(w));
-
+        
         int sceneId = key - 49;
 
         if (sceneId > 4 || sceneId < 0) {

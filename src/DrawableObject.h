@@ -33,6 +33,10 @@ public:
 	}
 
 	void draw() {
+		draw(false);
+	}
+
+	void draw(bool disableDepthMask) {
 		glm::mat4 finalTransform = glm::mat4(1.0f);
 
 		for (auto& transform : transforms) {
@@ -41,9 +45,9 @@ public:
 
 		program->applyTransformation(finalTransform);
 
-		program->useProgram();
 		model->bind();
-		model->draw();
+		program->useProgram();
+		model->draw(disableDepthMask);
 		glUseProgram(0);
 	}
 };

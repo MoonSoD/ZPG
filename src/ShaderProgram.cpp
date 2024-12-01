@@ -106,5 +106,3 @@ void ShaderProgram::updateLight(glm::vec3& eye, glm::vec3& target) {
 	glUseProgram(0);
 }
 
-
-

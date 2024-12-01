@@ -16,7 +16,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	auto texShader = new ShaderProgram("src/shaders/TextureVertexShader.glsl", "src/shaders/TextureFragmentShader.glsl");
 	texShader->setCamera(this->getCamera());
 
-	auto skyShader = new ShaderProgram("src/shaders/TextureVertexShader.glsl", "src/shaders/SkyboxFragmentShader.glsl");
+	auto skyShader = new ShaderProgram("src/shaders/SkyboxVertexShader.glsl", "src/shaders/SkyboxFragmentShader.glsl");
 	skyShader->setCamera(this->getCamera());
 
 
@@ -56,6 +56,13 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
         glm::radians(22.5),
         glm::radians(27.5)
     );
+
+
+	objects["skybox"] = new DrawableObject(
+		new Skybox(),
+		skyShader,
+		TransformBuilder().build()
+	);
 
 	int numTrees = 50;
 	int numBushes = 150;
@@ -107,22 +114,16 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		);
 	}
 
-	// objects["ground"] = new DrawableObject(
-	// 	new PlainModel(),
-	// 	texShader,
-	// 	TransformBuilder()
-	// 	.translate(0, 0, 0)
-	// 	.scale(50.0f)
-	// 	.build()
-	// );
-
-	objects["skybox"] = new DrawableObject(
-		new Skybox(),
-		skyShader,
+	objects["ground"] = new DrawableObject(
+		new PlainModel(),
+		texShader,
 		TransformBuilder()
+		.translate(0, 0, 0)
 		.scale(50.0f)
 		.build()
 	);
+
+
 
 	this->setLight(light);
 	// this->setLight(light2);
@@ -157,10 +158,16 @@ void ForestScene::render() {
 		rotation = 0;
 	}
 
+	objects["skybox"]->draw(true);
+
     for (auto& obj : objects) {
         if (obj.first.find("tree") != std::string::npos) {
             obj.second->setTransform("r0", Transformation::rotate(0, rotation, 0));  
         }
+
+		if (obj.first.find("skybox") != std::string::npos) {
+			continue;
+		}
 
         obj.second->draw();  
     }

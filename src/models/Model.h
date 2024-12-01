@@ -27,5 +27,17 @@ public:
 	}
 
 	virtual void draw() = 0;
+
+	void draw(bool disableDepthMask) {
+		if (disableDepthMask) {
+			glDepthMask(GL_FALSE);
+		}
+
+		draw();
+
+		if (disableDepthMask) {
+			glDepthMask(GL_TRUE);
+		}
+	};
 };
 

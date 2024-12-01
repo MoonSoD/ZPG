@@ -38,30 +38,28 @@ GLuint loadCubemap(const std::string& basePath) {
 
 class Skybox : public Model
 {
+private:
+    GLuint skybox;
 public:
 	Skybox() : Model() {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(skycube), skycube, GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (GLvoid*)0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (GLvoid*)(3 * sizeof(float)));
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (GLvoid*)(6 * sizeof(float)));
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 
 		glBindVertexArray(0);
 
 		glActiveTexture(GL_TEXTURE0);
 
-		auto skybox = loadCubemap("/Users/stefanmelicher/Documents/School/ZPG/zpg_project/src/textures/cubemap/");
-
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox);
+		skybox = loadCubemap("./src/textures/cubemap/");
 	}
 
 	void draw() override {
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(VAO);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, skybox);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 };
 

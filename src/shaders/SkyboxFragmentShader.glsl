@@ -1,6 +1,5 @@
 #version 330
 
-in vec2 vt_out;
 in vec3 fragPosition;
 
 uniform samplerCube textureUnitID;
