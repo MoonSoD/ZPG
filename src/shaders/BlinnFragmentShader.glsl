@@ -5,6 +5,10 @@ in vec3 fragPosition;
 uniform vec3 lightPosition;
 uniform vec3 viewPosition;
 
+uniform sampler2D textureUnitID;
+
+in vec2 uv;
+
 out vec4 fragColor;
 
 void main() {
@@ -19,5 +23,12 @@ void main() {
     float spec = pow(max(dot(norm, halfwayDir), 0.0), 32.0);
     vec4 specular = spec * vec4(1.0, 1.0, 1.0, 1.0);
 
-    fragColor = vec4(0.2, 0.2, 0.2, 1.0) + diffuse + specular;
+
+    if (length(uv) > 0.0) {
+        vec4 textureColor = texture(textureUnitID, uv);
+        fragColor = textureColor * (diffuse + specular);
+    } else {
+        fragColor = diffuse + specular;
+    }
+
 }

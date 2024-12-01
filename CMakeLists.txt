@@ -89,6 +89,7 @@ add_executable(zpgproj
     src/scenes/ForestSceneBludicky.cpp
     src/scenes/ItemsScene.cpp
     src/scenes/SpheresScene.cpp
+    src/models/ModelLoader.cpp
     src/models/Model.cpp
     src/models/SquareModel.cpp
     src/models/BushModel.cpp

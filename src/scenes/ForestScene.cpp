@@ -4,7 +4,10 @@
 #include "../models/BushModel.h"
 #include "../models/Skybox.h"
 #include "../models/HouseModel.h"
+#include "../models/LoginModel.h"
+#include "../models/ZombieModel.h"
 #include "../transformations/TransformBuilder.h"
+#include "../lights/PointLight.h"
 
 #define _USE_MATH_DEFINES
 #include <random>
@@ -14,23 +17,19 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	auto shader = new ShaderProgram("src/shaders/PhongVertexShader.glsl", "src/shaders/PhongFragmentShaderMultiple.glsl");
 	shader->setCamera(this->getCamera());
 
-	auto texShader = new ShaderProgram("src/shaders/TextureVertexShader.glsl", "src/shaders/TextureFragmentShader.glsl");
-	texShader->setCamera(this->getCamera());
-
 	auto skyShader = new ShaderProgram("src/shaders/SkyboxVertexShader.glsl", "src/shaders/SkyboxFragmentShader.glsl");
 	skyShader->setCamera(this->getCamera());
 
-	auto modelShader = new ShaderProgram("src/shaders/ModelVertexShader.glsl", "src/shaders/ModelFragmentShader.glsl");
-	modelShader->setCamera(this->getCamera());
-
+	auto blinn = new ShaderProgram("src/shaders/BlinnVertexShader.glsl", "src/shaders/BlinnFragmentShader.glsl");
+	blinn->setCamera(this->getCamera());
 
 	// Light* light = new Light(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.385, 0.647, 0.812));
 	// this->setLight(light);
     auto light = new Light(
 		1,
-        glm::vec3(0, 5, 0),
+        glm::vec3(10, 5, 0),
         glm::vec3(1, 1, 1),
-        glm::vec3(0.5, 0.5, 0.5),
+        glm::vec3(1.0, 1.0, 1.0),
         glm::vec3(1, 1, 1),
         glm::vec3(1, 1, 1),
         glm::vec3(0.385, 0.647, 0.812),
@@ -61,11 +60,32 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
         glm::radians(27.5)
     );
 
+	auto pointLight = new PointLight(
+        glm::vec3(0, 0, 0),
+        glm::vec3(0, 0, 0),
+        glm::vec3(0.1, 0.1, 0.1),
+        glm::vec3(0.8, 0.8, 0.8),
+        glm::vec3(1, 1, 1),
+        glm::vec3(0.385, 0.647, 0.812),
+        glm::vec3(0, 0, 0)
+    );
+
+
 
 	objects["skybox"] = new DrawableObject(
 		new Skybox(),
 		skyShader,
 		TransformBuilder().build()
+	);
+
+	objects["login"] = new DrawableObject(
+		new LoginModel(),
+		shader,
+		TransformBuilder()
+		.rotate(1.57, 3.14, 0.8)
+		.translate(40.0f, 0, 80.0)
+		.scale(0.1f)
+		.build()
 	);
 
 	int numTrees = 50;
@@ -123,6 +143,17 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		new HouseModel(),
 		shader,
 		TransformBuilder()
+		.translate(0, 0, 20.0)
+		.rotate(0, 1.57, 0)
+		.build()
+	);
+
+	objects["zombie"] = new DrawableObject(
+		new ZombieModel(),
+		blinn,
+		TransformBuilder()
+		.translate(0.0, 0, 8.0)
+		.rotate(0, 1.57, 0)
 		.build()
 	);
 
@@ -136,6 +167,8 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		.build()
 	);
 
+	// this->setLight(pointLight);
+
 	this->setLight(light);
 	// this->setLight(light2);
 	this->setLight(light3);
@@ -146,22 +179,6 @@ void ForestScene::render() {
 	recalculateCamera();
 
     this->controller->processInput();
-
-    // for (auto& light : lights) {
-	// 	if (light->getType() != 1) {
-	// 		continue;
-	// 	}
-
-    //     auto currentPosition = light->getPosition();
-
-    //     glm::vec3 newPosition = glm::vec3(
-    //         currentPosition.x + 1.0f,
-    //         currentPosition.y,
-	// 		currentPosition.z
-    //     );
-
-    //     light->setPosition(newPosition);
-    // } 
 
 	rotation += 0.001f;
 
