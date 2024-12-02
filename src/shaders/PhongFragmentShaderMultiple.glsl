@@ -76,18 +76,18 @@ void main(void) {
             attenuation *= spotEffect;
         }
 
-        ambient += currentLight.ambient * objectColor * 0.05;
+        ambient += attenuation * objectColor;
 
         vec3 norm = normalize(ex_worldNorm); 
         float diffIntensity = max(dot(lightVector, norm), 0.0);
-        diffuse += diffIntensity * currentLight.diffuse * currentLight.color * attenuation;
+        diffuse += diffIntensity * currentLight.color * attenuation;
 
         float specularStrength = 0.5; 
         float shininess = 32.0;      
         vec3 viewDir = normalize(viewPosition - vec3(ex_worldPos)); 
         vec3 reflectDir = reflect(-lightVector, norm); 
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess); 
-        specular += specularStrength * spec * currentLight.specular * attenuation;
+        specular += specularStrength * spec * attenuation;
     }
 
     finalColor = ambient + diffuse + specular;

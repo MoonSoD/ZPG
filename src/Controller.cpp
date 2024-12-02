@@ -23,6 +23,7 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
         Controller* controller = static_cast<Controller*>(glfwGetWindowUserPointer(w));
         
         controller->camera->recalculateProjectMatrix(width, height);
+        glViewport(0, 0, width, height);
     });
 
     glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mode) {
