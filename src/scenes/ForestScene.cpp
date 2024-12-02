@@ -239,6 +239,11 @@ void ForestScene::render() {
 			continue;
 		}
 
+		glStencilFunc(GL_ALWAYS, rand() % 100, 0xFF);
+
+		// glm::vec3 p = glm::unProject(800, camera->getViewMatrix(), camera->getProjectMatrix(), )
+
+
         obj.second->draw();  
     }
 }

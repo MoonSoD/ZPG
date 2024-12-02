@@ -105,6 +105,8 @@ public:
 
 	void run() {
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp ( GL_KEEP , GL_KEEP , GL_REPLACE );
 		while (!glfwWindowShouldClose(window)) {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -112,7 +114,7 @@ public:
 
 			scenes[sceneId]->render();
 
-			glfwPollEvents();
+			glfwPollEvents(); //don't call after clearing the buffer!!
 			glfwSwapBuffers(window);
 		}
 

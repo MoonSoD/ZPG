@@ -12,6 +12,8 @@ uniform bool lockSkybox;
 
 void main()
 {
+
+	//TODO: rework w/o view
 	mat4 view = viewMatrix;
 	view[3][0] = 0.0;
 	view[3][1] = 0.0;

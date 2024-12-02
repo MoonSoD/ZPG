@@ -25,6 +25,25 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
         controller->camera->recalculateProjectMatrix(width, height);
     });
 
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mode) {
+        Controller* controller = static_cast<Controller*>(glfwGetWindowUserPointer(window));
+     
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        GLbyte color[4];
+        GLfloat depth;
+        GLuint index; // identifikace tělesa
+        //hodnota horneho pruhu
+        float x = controller->lastX;
+        float y = controller->lastY;
+
+        int newy = height - y - 10;
+        glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+        glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+        glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+        printf("Clicked on pixel %d, %d, color %02hhx%02hhx%02hhx%02hhx, depth % f, stencil index % u\n", x, y, color[0], color[1], color[2], color[3], depth, index);
+    });
+
     glfwSetWindowUserPointer(window, this);
 }
 

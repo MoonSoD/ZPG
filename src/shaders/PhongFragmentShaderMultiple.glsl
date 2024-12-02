@@ -76,7 +76,7 @@ void main(void) {
             attenuation *= spotEffect;
         }
 
-        ambient += currentLight.ambient * objectColor * attenuation;
+        ambient += currentLight.ambient * objectColor * 0.05;
 
         vec3 norm = normalize(ex_worldNorm); 
         float diffIntensity = max(dot(lightVector, norm), 0.0);

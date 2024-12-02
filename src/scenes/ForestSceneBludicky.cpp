@@ -109,6 +109,7 @@ void ForestSceneBludicky::render() {
 
     this->controller->processInput();
 
+
     for (auto& light : lights) {
 		if (light->getType() != 1) {
 			continue;
