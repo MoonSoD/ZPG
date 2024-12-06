@@ -23,6 +23,7 @@ void ShaderProgram::updateCamera() {
 		glUseProgram(id);
 		GLint idViewMatrix = glGetUniformLocation(id, "viewMatrix");
 		GLint idProjectionMatrix = glGetUniformLocation(id, "projectionMatrix");
+		//GLint idSkyboxViewMatrix = glGetUniformLocation(id, "skyboxViewMatrix");
 
 		if (idViewMatrix == -1 || idProjectionMatrix == -1) {
 			// fprintf(stderr, "Couldn't find viewMatrix or projectionMatrix in shader\n");
@@ -31,9 +32,17 @@ void ShaderProgram::updateCamera() {
 
 		glUniformMatrix4fv(idViewMatrix, 1, GL_FALSE, glm::value_ptr(camera->getViewMatrix()));
 		glUniformMatrix4fv(idProjectionMatrix, 1, GL_FALSE, glm::value_ptr(camera->getProjectMatrix()));
-		glUseProgram(0);
+
 		glm::vec3 eye = camera->getEye();
 		glm::vec3 target = camera->getTarget();
+
+
+        // glm::mat4 skyboxViewMatrix = glm::mat4(glm::mat3(camera->getViewMatrix()));  // Only rotation, no translation
+
+        // // Send the adjusted view matrix for the skybox
+        // glUniformMatrix4fv(idSkyboxViewMatrix, 1, GL_FALSE, glm::value_ptr(skyboxViewMatrix));
+
+		glUseProgram(0);
 
 		this->updateLight(eye, target);
 	}
@@ -79,8 +88,7 @@ void ShaderProgram::updateLight(Light* light, int lightIndex) {
 	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].linearAttenuation").c_str()), light->getLinearAttenuation());
 	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].quadraticAttenuation").c_str()), light->getQuadraticAttenuation());
 
-	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].innerConeAngle").c_str()), light->getInnerConeAngle());
-	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].outerConeAngle").c_str()), light->getOuterConeAngle());
+	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].cutoffAngle").c_str()), light->getCutoffAngle());
 
 	glUniform3fv(glGetUniformLocation(id, "objectColor"), 1, glm::value_ptr(light->getColor()));
 

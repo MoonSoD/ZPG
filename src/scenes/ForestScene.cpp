@@ -56,8 +56,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
         glm::vec3(1, 1, 1),
         glm::vec3(0.385, 0.647, 0.812),
         glm::vec3(0, 0, 0),
-        glm::radians(22.5),
-        glm::radians(27.5)
+        glm::radians(22.5)
     );
 
 	auto firefly1 = new Light(
@@ -92,13 +91,14 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
         glm::vec3(0, 0, 0)
     );
 
-
-
-	objects["skybox"] = new DrawableObject(
+	auto skybox = new DrawableObject(
 		new Skybox(),
 		skyShader,
-		TransformBuilder().build()
+		TransformBuilder()
+		.build()
 	);
+
+	this->setSkybox(skybox);
 
 	objects["login"] = new DrawableObject(
 		new LoginModel(),
@@ -202,25 +202,19 @@ void ForestScene::render() {
 	recalculateCamera();
 
     this->controller->processInput();
-
 	for (auto& light : lights) {
 		if (light->getType() != 1) {
 			continue;
 		}
 
-        float randomX = ((std::rand() % 100) / 100.0f) - 0.5;  
-        float randomZ = ((std::rand() % 100) / 100.0f) - 0.5; 
-	
-        glm::vec3 currentPosition = light->getPosition();
+		glm::vec3 currentPosition = light->getPosition();
 
-        glm::vec3 newPosition = glm::vec3(
-            currentPosition.x + randomX * 1.2f,
-            currentPosition.y,
-			currentPosition.z + randomZ * 1.2f
-        );
+		auto rotationMatrix = Transformation::rotateY(glm::radians(1.0f))->getMatrix();
 
-        light->setPosition(newPosition);
-    } 
+		glm::vec4 newPosition = rotationMatrix * glm::vec4(currentPosition, 1.0f);
+
+		light->setPosition(glm::vec3(newPosition));
+	}
 
 	rotation += 0.001f;
 
@@ -228,17 +222,11 @@ void ForestScene::render() {
 		rotation = 0;
 	}
 
-	objects["skybox"]->draw(true);
-
     for (auto& obj : objects) {
         if (obj.first.find("tree") != std::string::npos) {
-            obj.second->setTransform("r0", Transformation::rotate(0, rotation, 0));  
+			obj.second->setTransform("r0", Transformation::rotate(0, rotation, 0));  
         }
-
-		if (obj.first.find("skybox") != std::string::npos) {
-			continue;
-		}
-
+	
 		glStencilFunc(GL_ALWAYS, rand() % 100, 0xFF);
 
 		// glm::vec3 p = glm::unProject(800, camera->getViewMatrix(), camera->getProjectMatrix(), )

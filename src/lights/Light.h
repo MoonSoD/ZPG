@@ -2,6 +2,9 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <unordered_map>
+#include "transformations/Transformation.h"
+
 
 class Scene;
 
@@ -29,16 +32,17 @@ private:
     float linearAttenuation = 0.05;
     float quadraticAttenuation = 0.05;
 
-    float innerConeAngle = 0.0;
-    float outerConeAngle = 0.0;
-
+    float cutoffAngle = 0.0;
+    
     std::vector<Scene*> observers;
 
     void notifyObservers();
 
+    std::unordered_map<std::string, std::unique_ptr<Transformation>> transforms;
+
 public:
     Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition);
-    Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition, float innerConeAngle, float outerConeAngle);
+    Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition, float cutoffAngle);
     int getType();
 
     glm::vec3& getAmbient();
@@ -54,8 +58,7 @@ public:
     float getLinearAttenuation();
     float getQuadraticAttenuation();
 
-    float getInnerConeAngle();
-    float getOuterConeAngle();
+    float getCutoffAngle();
 
     void setAmbient(const glm::vec3& ambient);
     void setDiffuse(const glm::vec3& diffuse);
@@ -67,4 +70,9 @@ public:
     void setColor(const glm::vec3& color);
 
     void addObserver(Scene* scene);
+
+    void setTransform(std::string key, std::unique_ptr<Transformation>&& transform);
+
+	Transformation* getTransform(std::string key);
+
 };

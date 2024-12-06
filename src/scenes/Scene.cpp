@@ -29,3 +29,13 @@ void Scene::recalculateCamera() {
 	glfwGetFramebufferSize(window, &width, &height);
     this->camera->recalculateProjectMatrix(width, height);
 }
+
+void Scene::setSkybox(DrawableObject* skybox) {
+    this->skybox = skybox;
+}
+
+void Scene::renderSkybox() {
+    if (skybox != nullptr) {
+        skybox->draw(true);
+    }
+}

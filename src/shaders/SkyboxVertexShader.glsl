@@ -8,17 +8,14 @@ uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 modelMatrix;
 
+uniform vec3 viewPosition;
+
 uniform bool lockSkybox;
 
 void main()
-{
+{	
+    mat4 skyboxViewMatrix = mat4(mat3(viewMatrix)); 
 
-	//TODO: rework w/o view
-	mat4 view = viewMatrix;
-	view[3][0] = 0.0;
-	view[3][1] = 0.0;
-	view[3][2] = 0.0;
-
-	gl_Position = projectionMatrix * view * vec4 (vp, 1.0);
+	gl_Position = projectionMatrix * skyboxViewMatrix * vec4(vp, 1.0);
     fragPosition = vp;
 }

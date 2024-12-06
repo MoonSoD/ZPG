@@ -112,6 +112,9 @@ public:
 
 			auto sceneId = controller->getSceneId();
 
+			scenes[sceneId]->renderSkybox();
+			glClear(GL_DEPTH_BUFFER_BIT); 
+
 			scenes[sceneId]->render();
 
 			glfwPollEvents(); //don't call after clearing the buffer!!

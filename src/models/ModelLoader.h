@@ -6,6 +6,8 @@
 
 #include <GL/glew.h>
 
+#include "../materials/Material.h"
+
 #include <iostream>
 
 struct Vertex {
@@ -17,5 +19,5 @@ struct Vertex {
 
 class ModelLoader {
     public:
-        static std::tuple<GLuint, int> loadModelFromFile(std::string fileName);
+        static std::tuple<GLuint, int, std::vector<Material>> loadModelFromFile(std::string fileName);
 };

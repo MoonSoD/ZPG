@@ -5,6 +5,7 @@
 #include "../lib/soil/include/SOIL/SOIL.h"
 
 #include "ModelLoader.h"
+#include "../materials/Material.h"
 
 class Model
 {
@@ -13,7 +14,8 @@ protected:
 	GLuint VAO = 0;
 	GLuint texture = 0;
 
-	std::tuple<GLuint, int> modelLoaderResult;
+	std::tuple<GLuint, int, std::vector<Material>> modelLoaderResult;
+	std::vector<Material> materials;
 public:
 
 	Model() {
@@ -31,6 +33,7 @@ public:
 		modelLoaderResult = ModelLoader::loadModelFromFile(fileName);
 	
 		VAO = std::get<0>(modelLoaderResult);
+		materials = std::get<2>(modelLoaderResult);
 	}
 
 	void loadTexture(std::string fileName) {
@@ -52,20 +55,19 @@ public:
 
 	virtual void draw() = 0;
 
+	/* 
+	* @deprecated
+	*/
 	void draw(bool disableDepthMask) {
-		if (disableDepthMask) {
-			glDepthMask(GL_FALSE);
-		}
-
 		draw();
-
-		if (disableDepthMask) {
-			glDepthMask(GL_TRUE);
-		}
 	};
 
 	int getIndicesCount() {
 		return std::get<1>(modelLoaderResult);
+	}
+
+	std::vector<Material> getMaterials() {
+		return materials;
 	}
 };
 

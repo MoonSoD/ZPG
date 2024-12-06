@@ -7,17 +7,16 @@ out vec4 out_Color;
 
 struct Light {
     int type;              
-    vec3 ambient;           
-    vec3 diffuse;           
-    vec3 specular;          
+    
     vec3 position;          
     vec3 direction;    
-    vec3 color;             
+    vec3 color;   
+              
     float constantAttenuation; 
     float linearAttenuation;   
     float quadraticAttenuation; 
-    float innerConeAngle;   
-    float outerConeAngle;  
+    
+    float cutoffAngle;
 };
 
 uniform Light light[4];  
@@ -37,14 +36,14 @@ void main(void) {
     vec3 ambient = vec3(0.0);
     vec3 diffuse = vec3(0.0);
     vec3 specular = vec3(0.0);
-    vec3 finalColor = vec3(0.0);
+    vec4 finalColor = vec4(0.0);
 
     vec3 lightVector;
 
     for (int i = 0; i < 4; i++) {  
         Light currentLight = light[i];
 
-        float attenuation = 1.0;
+        float attenuation = 0.5;
 
         if (currentLight.type == 1) {
             float distance = length(currentLight.position - vec3(ex_worldPos));
@@ -57,26 +56,19 @@ void main(void) {
         }
         
         if (currentLight.type == 3) {
-            currentLight.position = viewPosition; 
-            vec3 spotDir = cameraTarget; 
+            currentLight.position = viewPosition;
+            vec3 spotlightVector = cameraTarget; 
 
-            lightVector = normalize(currentLight.position - ex_worldPos.xyz); 
-            
-            float spotEffect = dot(normalize(-spotDir), lightVector); 
-            
-            if (spotEffect < cos(currentLight.outerConeAngle)) {
-                spotEffect = 0.0;
-            } else if (spotEffect > cos(currentLight.innerConeAngle)) {
-                spotEffect = 1.0;
-            } else {
-                float epsilon = cos(currentLight.innerConeAngle) - cos(currentLight.outerConeAngle);
-                spotEffect = (spotEffect - cos(currentLight.outerConeAngle)) / epsilon;
-            }
+            lightVector = normalize(currentLight.position - vec3(ex_worldPos));
 
-            attenuation *= spotEffect;
+            float spotEffect = dot(normalize(-spotlightVector), lightVector);
+
+            if (spotEffect < cos(currentLight.cutoffAngle)) {
+                attenuation = 0.0; 
+            } 
         }
 
-        ambient += attenuation * objectColor;
+        ambient += objectColor * attenuation;
 
         vec3 norm = normalize(ex_worldNorm); 
         float diffIntensity = max(dot(lightVector, norm), 0.0);
@@ -84,17 +76,21 @@ void main(void) {
 
         float specularStrength = 0.5; 
         float shininess = 32.0;      
-        vec3 viewDir = normalize(viewPosition - vec3(ex_worldPos)); 
-        vec3 reflectDir = reflect(-lightVector, norm); 
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess); 
+
+        vec3 cameraDirection = normalize(viewPosition - vec3(ex_worldPos)); 
+        vec3 reflectionDirection = reflect(-lightVector, norm); 
+
+        float specWithoutShine = max(dot(cameraDirection, reflectionDirection), 0.0);
+        float spec = pow(specWithoutShine, shininess);
+
         specular += specularStrength * spec * attenuation;
     }
 
-    finalColor = ambient + diffuse + specular;
+    finalColor = vec4(ambient + diffuse + specular, 1.0);
+    
     if (length(uv) > 0.0) {
-        vec4 textureColor = texture(textureUnitID, uv);
-        out_Color = vec4(textureColor.rgb * finalColor, textureColor.a); 
+        out_Color = texture(textureUnitID, uv) * finalColor;
     } else {
-        out_Color = vec4(finalColor, 1.0);
+        out_Color = finalColor;
     }
 }

@@ -20,6 +20,7 @@ protected:
 	std::vector<Light*> lights;
 	int frames = 0;
 	int updatesFrequency = 60;
+	DrawableObject* skybox;
 
 public:
 	Scene(GLFWwindow* window, Camera* camera, Controller* controller);
@@ -34,5 +35,9 @@ public:
 	void recalculateCamera();
 
 	virtual void render() = 0;
+
+	void setSkybox(DrawableObject* skybox);
+
+	void renderSkybox();
 };
 

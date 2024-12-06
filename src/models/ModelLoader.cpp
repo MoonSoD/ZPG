@@ -3,7 +3,7 @@
 
 #include <GLM/glm.hpp>
 
-std::tuple<GLuint, int> ModelLoader::loadModelFromFile(std::string fileName)
+std::tuple<GLuint, int, std::vector<Material>> ModelLoader::loadModelFromFile(std::string fileName)
 {
     GLuint VAO = 0;
     int indicesCount = 0;  
@@ -18,6 +18,7 @@ std::tuple<GLuint, int> ModelLoader::loadModelFromFile(std::string fileName)
 
     const aiScene* scene = importer.ReadFile(fileName, importOptions);
 
+    std::vector<Material> materials;
 
     if (scene) { //pokud bylo nacteni uspesne
         printf("scene->mNumMeshes = %d\n", scene->mNumMeshes);
@@ -33,6 +34,17 @@ std::tuple<GLuint, int> ModelLoader::loadModelFromFile(std::string fileName)
             glm::vec4 diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
             if (AI_SUCCESS == aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &d))
                 diffuse = glm::vec4(d.r, d.g, d.b, d.a);
+
+            glm::vec4 ambient = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+            if (AI_SUCCESS == aiGetMaterialColor(mat, AI_MATKEY_COLOR_AMBIENT, &d))
+                ambient = glm::vec4(d.r, d.g, d.b, d.a);
+
+            glm::vec4 specular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+            if (AI_SUCCESS == aiGetMaterialColor(mat, AI_MATKEY_COLOR_SPECULAR, &d))
+                specular = glm::vec4(d.r, d.g, d.b, d.a);
+
+            Material material(ambient, diffuse, specular);
+            materials.push_back(material);
         }
 
         //Objects
@@ -121,5 +133,5 @@ std::tuple<GLuint, int> ModelLoader::loadModelFromFile(std::string fileName)
 
     glBindVertexArray(0);
 
-    return std::make_tuple(VAO, indicesCount);
+    return std::make_tuple(VAO, indicesCount, materials);
 }

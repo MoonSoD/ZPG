@@ -14,8 +14,8 @@ Light::Light(const int type,const glm::vec3& position, const glm::vec3& directio
     notifyObservers();
 }
 
-Light::Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition, float innerConeAngle, float outerConeAngle)
-    : type(type), position(position), direction(direction), ambient(ambient), diffuse(diffuse), specular(specular), color(color), cameraPosition(cameraPosition), innerConeAngle(innerConeAngle), outerConeAngle(outerConeAngle) {
+Light::Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition, float cutoffAngle)
+    : type(type), position(position), direction(direction), ambient(ambient), diffuse(diffuse), specular(specular), color(color), cameraPosition(cameraPosition), cutoffAngle(cutoffAngle) {
     notifyObservers();
 }
 
@@ -59,12 +59,8 @@ float Light::getQuadraticAttenuation() {
     return this->quadraticAttenuation;
 }
 
-float Light::getInnerConeAngle() {
-    return this->innerConeAngle;
-}
-
-float Light::getOuterConeAngle() {
-    return this->outerConeAngle;
+float Light::getCutoffAngle() {
+    return this->cutoffAngle;
 }
 
 void Light::setAmbient(const glm::vec3& ambient) {
@@ -100,4 +96,12 @@ void Light::setColor(const glm::vec3& color) {
 void Light::addObserver(Scene* scene) {
     observers.push_back(scene);
     notifyObservers();
+}
+
+void Light::setTransform(std::string key, std::unique_ptr<Transformation>&& transform) {
+    transforms[key] = std::move(transform);
+}
+
+Transformation* Light::getTransform(std::string key) {
+    return transforms[key].get();
 }
