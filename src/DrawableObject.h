@@ -50,8 +50,12 @@ public:
 
 		program->applyTransformation(finalTransform);
 		program->applyMaterial(material);
-		
+
+		if (material != nullptr) {
+			material->bindTexture();
+		}
 		program->useProgram();
+		
 
 		model->bind();
 		model->draw(disableDepthMask);

@@ -164,6 +164,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	objects["house"] = new DrawableObject(
 		new HouseModel(),
 		shader,
+		new Material(new Texture("./src/models/definitions/house/house.png")),
 		TransformBuilder()
 		.translate(0, 0, 20.0)
 		.rotate(0, 1.57, 0)
@@ -173,6 +174,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	objects["zombie"] = new DrawableObject(
 		new ZombieModel(),
 		blinn,
+		new Material(new Texture("./src/models/definitions/zombie/zombie.png")),
 		TransformBuilder()
 		.translate(0.0, 0, 8.0)
 		.rotate(0, 1.57, 0)
@@ -183,6 +185,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	objects["ground"] = new DrawableObject(
 		new PlainModel(),
 		shader,
+		new Material(new Texture("./src/textures/grass.png")),
 		TransformBuilder()
 		.translate(0, 0, 0)
 		.scale(50.0f)
@@ -229,7 +232,8 @@ void ForestScene::render() {
 	
 		glStencilFunc(GL_ALWAYS, rand() % 100, 0xFF);
 
-		// glm::vec3 p = glm::unProject(800, camera->getViewMatrix(), camera->getProjectMatrix(), )
+	//		glm::vec3 screenX = glm::vec3();
+	//	glm::vec3 p = glm::unProject(800, camera->getViewMatrix(), camera->getProjectMatrix(), )
 
 
         obj.second->draw();  

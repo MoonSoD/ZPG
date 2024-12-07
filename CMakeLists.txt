@@ -76,6 +76,7 @@ add_executable(zpgproj
     src/Controller.cpp
     src/DrawableObject.cpp
     src/lights/Light.cpp
+    src/textures/Texture.cpp
     src/materials/Material.cpp
     src/Shader.cpp
     src/ShaderLoader.cpp
