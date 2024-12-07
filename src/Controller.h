@@ -18,4 +18,6 @@ public:
 
     int getSceneId();
     void setSceneId(int sceneId);
+
+    bool getIsSkyboxLocked() { return this->camera->getIsSkyboxLocked(); }
 };

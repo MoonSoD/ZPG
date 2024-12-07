@@ -23,6 +23,7 @@ void ShaderProgram::updateCamera() {
 		glUseProgram(id);
 		GLint idViewMatrix = glGetUniformLocation(id, "viewMatrix");
 		GLint idProjectionMatrix = glGetUniformLocation(id, "projectionMatrix");
+		GLint idIsSkyboxLocked = glGetUniformLocation(id, "isSkyboxLocked");
 		//GLint idSkyboxViewMatrix = glGetUniformLocation(id, "skyboxViewMatrix");
 
 		if (idViewMatrix == -1 || idProjectionMatrix == -1) {
@@ -32,6 +33,7 @@ void ShaderProgram::updateCamera() {
 
 		glUniformMatrix4fv(idViewMatrix, 1, GL_FALSE, glm::value_ptr(camera->getViewMatrix()));
 		glUniformMatrix4fv(idProjectionMatrix, 1, GL_FALSE, glm::value_ptr(camera->getProjectMatrix()));
+		glUniform1i(idIsSkyboxLocked, camera->getIsSkyboxLocked());
 
 		glm::vec3 eye = camera->getEye();
 		glm::vec3 target = camera->getTarget();

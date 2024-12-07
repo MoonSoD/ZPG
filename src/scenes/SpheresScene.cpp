@@ -20,16 +20,16 @@ SpheresScene::SpheresScene(GLFWwindow* window, Camera* camera, Controller* contr
     );
 
 
-    Light* light2 = new Light(
-        2,
-        glm::vec3(0, 0, 0),
-        glm::vec3(1, 0, 0),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(0.8, 0.8, 0.8), 
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0)
-    );
+    // Light* light2 = new Light(
+    //     2,
+    //     glm::vec3(0, 0, 0),
+    //     glm::vec3(1, 0, 0),
+    //     glm::vec3(0.5, 0.5, 0.5),
+    //     glm::vec3(0.8, 0.8, 0.8), 
+    //     glm::vec3(1, 1, 1),
+    //     glm::vec3(0.385, 0.647, 0.812),
+    //     glm::vec3(0, 0, 0)
+    // );
 
 
     objects["sp1"] = new DrawableObject(

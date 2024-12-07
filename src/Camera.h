@@ -20,6 +20,8 @@ private:
 	glm::vec3 target;
 	glm::vec3 up;
 
+	bool isSkyboxLocked = false;
+
 	float alpha;
 	float fi;
 
@@ -56,5 +58,8 @@ public:
 
 	void addObserver(ShaderProgram* shader);
 	void removeObserver(ShaderProgram* shader);
+
+	void setSkyboxLocked(bool isSkyboxLocked);
+	bool getIsSkyboxLocked();
 };
 

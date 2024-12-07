@@ -113,7 +113,9 @@ public:
 			auto sceneId = controller->getSceneId();
 
 			scenes[sceneId]->renderSkybox();
-			glClear(GL_DEPTH_BUFFER_BIT); 
+			if (!controller->getIsSkyboxLocked()) {
+				glClear(GL_DEPTH_BUFFER_BIT);
+			} 
 
 			scenes[sceneId]->render();
 

@@ -10,10 +10,16 @@ uniform mat4 modelMatrix;
 
 uniform vec3 viewPosition;
 
-uniform bool lockSkybox;
+uniform bool isSkyboxLocked;
 
 void main()
 {	
+    if (isSkyboxLocked) {
+	    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vp, 1.0);
+        fragPosition = vec3(modelMatrix * vec4(vp, 1.0));
+        return;
+    } 
+
     mat4 skyboxViewMatrix = mat4(mat3(viewMatrix)); 
 
 	gl_Position = projectionMatrix * skyboxViewMatrix * vec4(vp, 1.0);

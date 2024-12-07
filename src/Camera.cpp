@@ -132,3 +132,12 @@ void Camera::addObserver(ShaderProgram* shader) {
 void Camera::removeObserver(ShaderProgram* shader) {
     observers.erase(std::remove(observers.begin(), observers.end(), shader), observers.end());
 }
+
+void Camera::setSkyboxLocked(bool isSkyboxLocked) {
+    this->isSkyboxLocked = isSkyboxLocked;
+    notifyObservers();
+}
+
+bool Camera::getIsSkyboxLocked() {
+    return this->isSkyboxLocked;
+}

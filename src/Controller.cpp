@@ -9,6 +9,12 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
     glfwSetKeyCallback(window, [](GLFWwindow* w, int key, int scancode, int action, int mod) {
         Controller* controller = static_cast<Controller*>(glfwGetWindowUserPointer(w));
         
+        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+            printf("Locking skybox\n");
+            controller->camera->setSkyboxLocked(!controller->camera->getIsSkyboxLocked());
+            return;
+        }
+
         int sceneId = key - 49;
 
         if (sceneId > 4 || sceneId < 0) {

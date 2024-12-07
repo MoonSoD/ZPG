@@ -45,8 +45,8 @@ public:
 
 		program->applyTransformation(finalTransform);
 
-		model->bind();
 		program->useProgram();
+		model->bind();
 		model->draw(disableDepthMask);
 		glUseProgram(0);
 	}
