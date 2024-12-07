@@ -31,10 +31,16 @@ SpheresScene::SpheresScene(GLFWwindow* window, Camera* camera, Controller* contr
     //     glm::vec3(0, 0, 0)
     // );
 
+    Material* material = new Material(
+        glm::vec3(0.1, 0.1, 0.1), 
+        glm::vec3(1, 1, 1), 
+        glm::vec3(1, 1, 1)
+    );
 
     objects["sp1"] = new DrawableObject(
         new SphereModel(),
         shader,
+        material,
         TransformBuilder()
         .translate(2.0f, 0.0f, 0.0f)
         .build()
@@ -44,6 +50,7 @@ SpheresScene::SpheresScene(GLFWwindow* window, Camera* camera, Controller* contr
     objects["sp2"] = new DrawableObject(
         new SphereModel(),
         shader,
+        material,
         TransformBuilder()
         .translate(-2.0f, 0.0f, 0.0f)
         .build()
@@ -52,6 +59,7 @@ SpheresScene::SpheresScene(GLFWwindow* window, Camera* camera, Controller* contr
     objects["sp3"] = new DrawableObject(
         new SphereModel(),
         shader,
+        material,
         TransformBuilder()
         .translate(0.0f, 0.0f, 2.0f)
         .build()
@@ -60,6 +68,7 @@ SpheresScene::SpheresScene(GLFWwindow* window, Camera* camera, Controller* contr
     objects["sp4"] = new DrawableObject(
         new SphereModel(),
         shader,
+        material,
         TransformBuilder()
         .translate(0.0f, 0.0f, -2.0f)
         .build()

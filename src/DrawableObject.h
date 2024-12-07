@@ -11,10 +11,15 @@ private:
 	Model* model;
 	std::unordered_map<std::string, std::unique_ptr<Transformation>> transforms;
 	ShaderProgram* program;
+	Material* material = nullptr;
 
 public:
 	DrawableObject(Model* model, ShaderProgram* program, std::unordered_map<std::string, std::unique_ptr<Transformation>>&& transforms)
 		: model(model), program(program), transforms(std::move(transforms)) {
+	}
+
+	DrawableObject(Model* model, ShaderProgram* program, Material* material, std::unordered_map<std::string, std::unique_ptr<Transformation>>&& transforms)
+		: model(model), program(program), material(material), transforms(std::move(transforms)) {
 	}
 
 	DrawableObject(Model* model, ShaderProgram* program) 
@@ -44,8 +49,10 @@ public:
 		}
 
 		program->applyTransformation(finalTransform);
-
+		program->applyMaterial(material);
+		
 		program->useProgram();
+
 		model->bind();
 		model->draw(disableDepthMask);
 		glUseProgram(0);

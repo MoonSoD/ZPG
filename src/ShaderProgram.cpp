@@ -116,3 +116,31 @@ void ShaderProgram::updateLight(glm::vec3& eye, glm::vec3& target) {
 	glUseProgram(0);
 }
 
+void ShaderProgram::applyMaterial(Material* material) {
+	glUseProgram(id);
+	
+	auto ambient = glm::vec3(1.0f);
+	auto diffuse = glm::vec3(1.0f);
+	auto specular = glm::vec3(1.0f);
+
+	if (material != nullptr) {
+		ambient = material->getAmbient();
+		diffuse = material->getDiffuse();
+		specular = material->getSpecular();
+	}
+	
+
+	GLint idAmbient = glGetUniformLocation(id, "r_a");
+	GLint idDiffuse = glGetUniformLocation(id, "r_d");
+	GLint idSpecular = glGetUniformLocation(id, "r_s");
+
+	if (idAmbient == -1 || idDiffuse == -1 || idSpecular == -1) {
+		return;
+	}
+
+	glUniform3fv(idAmbient, 1, glm::value_ptr(ambient));
+	glUniform3fv(idDiffuse, 1, glm::value_ptr(diffuse));
+	glUniform3fv(idSpecular, 1, glm::value_ptr(specular));
+	glUseProgram(0);
+}
+

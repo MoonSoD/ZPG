@@ -11,7 +11,7 @@ struct Light {
     vec3 position;          
     vec3 direction;    
     vec3 color;   
-              
+
     float constantAttenuation; 
     float linearAttenuation;   
     float quadraticAttenuation; 
@@ -25,6 +25,10 @@ uniform vec3 viewPosition;
 uniform vec3 cameraTarget; 
 
 uniform vec3 objectColor; 
+
+uniform vec3 r_a;
+uniform vec3 r_d;
+uniform vec3 r_s;
 
 uniform mat4 viewMatrix;
 
@@ -68,11 +72,11 @@ void main(void) {
             } 
         }
 
-        ambient += objectColor * attenuation;
+        ambient += r_a * objectColor * attenuation;
 
         vec3 norm = normalize(ex_worldNorm); 
         float diffIntensity = max(dot(lightVector, norm), 0.0);
-        diffuse += diffIntensity * currentLight.color * attenuation;
+        diffuse += r_d * diffIntensity * currentLight.color * attenuation;
 
         float specularStrength = 0.5; 
         float shininess = 32.0;      
@@ -83,7 +87,7 @@ void main(void) {
         float specWithoutShine = max(dot(cameraDirection, reflectionDirection), 0.0);
         float spec = pow(specWithoutShine, shininess);
 
-        specular += specularStrength * spec * attenuation;
+        specular += r_s * specularStrength * spec * attenuation;
     }
 
     finalColor = vec4(ambient + diffuse + specular, 1.0);

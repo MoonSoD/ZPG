@@ -15,7 +15,6 @@ protected:
 	GLuint texture = 0;
 
 	std::tuple<GLuint, int, std::vector<Material>> modelLoaderResult;
-	std::vector<Material> materials;
 public:
 
 	Model() {
@@ -33,7 +32,7 @@ public:
 		modelLoaderResult = ModelLoader::loadModelFromFile(fileName);
 	
 		VAO = std::get<0>(modelLoaderResult);
-		materials = std::get<2>(modelLoaderResult);
+		//materials = std::get<2>(modelLoaderResult);
 	}
 
 	void loadTexture(std::string fileName) {
@@ -64,10 +63,6 @@ public:
 
 	int getIndicesCount() {
 		return std::get<1>(modelLoaderResult);
-	}
-
-	std::vector<Material> getMaterials() {
-		return materials;
 	}
 };
 
