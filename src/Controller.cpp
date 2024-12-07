@@ -41,10 +41,11 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
         GLfloat depth;
         GLuint index; // identifikace tělesa
         //hodnota horneho pruhu
-        float x = controller->lastX;
-        float y = controller->lastY;
+        double x,y;
+        glfwGetCursorPos(window, &x, &y);
 
-        int newy = height - y - 10;
+        int newy = height - static_cast<int>(y) - 10;
+        
         glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
         glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
         glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
