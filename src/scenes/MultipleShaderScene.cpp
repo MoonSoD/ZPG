@@ -8,13 +8,10 @@
 MultipleShaderScene::MultipleShaderScene(GLFWwindow* window, Camera* camera, Controller* controller) : Scene(window, camera, controller) {
     auto light = new PointLight(
         glm::vec3(0, 0, 0),
-        glm::vec3(0, 0, 0),
-        glm::vec3(0.1, 0.1, 0.1),
-        glm::vec3(0.8, 0.8, 0.8),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
         glm::vec3(0, 0, 0)
     );
+
+	Material* material = new Material(glm::vec3(0.385, 0.647, 0.812));
 
 	auto lambertShader = new ShaderProgram("src/shaders/LambertVertexShader.glsl", "src/shaders/LambertFragmentShader.glsl");
 	lambertShader->setCamera(camera);
@@ -22,6 +19,7 @@ MultipleShaderScene::MultipleShaderScene(GLFWwindow* window, Camera* camera, Con
 	objects["lambertSphere"] = new DrawableObject(
 		new SphereModel(),
 		lambertShader,
+		material,
 		TransformBuilder()
 		.build()
 	);
@@ -29,6 +27,7 @@ MultipleShaderScene::MultipleShaderScene(GLFWwindow* window, Camera* camera, Con
 	objects["lambertTree"] = new DrawableObject(
 		new TreeModel(),
 		lambertShader,
+		material,
 		TransformBuilder()
 		.translate(0, 3.0f, 0)
 		.build()
@@ -40,6 +39,7 @@ MultipleShaderScene::MultipleShaderScene(GLFWwindow* window, Camera* camera, Con
 	objects["phongSphere"] = new DrawableObject(
 		new SphereModel(),
 		phongShader,
+		material,
 		TransformBuilder()
 		.translate(5.0f, 0, 0)
 		.build()
@@ -49,6 +49,7 @@ MultipleShaderScene::MultipleShaderScene(GLFWwindow* window, Camera* camera, Con
 	objects["phongTree"] = new DrawableObject(
 		new TreeModel(),
 		phongShader,
+		material,
 		TransformBuilder()
 		.translate(5.0f, 3.0f, 0)
 		.build()
@@ -79,6 +80,7 @@ MultipleShaderScene::MultipleShaderScene(GLFWwindow* window, Camera* camera, Con
 	objects["blinnSphere"] = new DrawableObject(
 		new SphereModel(),
 		blinnShader,
+		material,
 		TransformBuilder()
 		.translate(-10.0f, 0, 0)
 		.build()
@@ -87,6 +89,7 @@ MultipleShaderScene::MultipleShaderScene(GLFWwindow* window, Camera* camera, Con
 	objects["blinnTree"] = new DrawableObject(
 		new TreeModel(),
 		blinnShader,
+		material,
 		TransformBuilder()
 		.translate(-10.0f, 3.0f, 0)
 		.build()

@@ -2,6 +2,8 @@
 #include "../models/ModelFactory.h"
 #include "../transformations/TransformBuilder.h"
 #include "../lights/PointLight.h"
+#include "../lights/DirectionalLight.h"
+#include "../lights/SpotLight.h"
 
 #define _USE_MATH_DEFINES
 #include <random>
@@ -19,69 +21,33 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 
 	// Light* light = new Light(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.385, 0.647, 0.812));
 	// this->setLight(light);
-    auto light = new Light(
-		1,
+    auto light = new PointLight(
         glm::vec3(10, 5, 0),
-        glm::vec3(1, 1, 1),
-        glm::vec3(1.0, 1.0, 1.0),
-        glm::vec3(1, 1, 1),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0)
+        glm::vec3(1, 1, 1)
     );
 
-	auto light2 = new Light(
-		2,
-        glm::vec3(0, 1, 0),
-        glm::vec3(0, -1, 0),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(1, 1, 1),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0)
+	auto light2 = new DirectionalLight(
+        glm::vec3(0, -1, 0)
     );
 
-	Light* light3 = new Light(
-        3,
+	Light* light3 = new SpotLight(
         glm::vec3(0, 0, 0),
         glm::vec3(1, 0, 0),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(0.8, 0.8, 0.8), 
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0),
         glm::radians(22.5)
     );
 
-	auto firefly1 = new Light(
-		1,
+	auto firefly1 = new PointLight(
         glm::vec3(0, 5, 0),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(1, 1, 1),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0)
+        glm::vec3(1, 1, 1)
     );
 
-	auto firefly2 = new Light(
-		1,
+	auto firefly2 = new PointLight(
         glm::vec3(20, 5, 0),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(1, 1, 1),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0)
+        glm::vec3(1, 1, 1)
     );
 
 	auto pointLight = new PointLight(
         glm::vec3(0, 0, 0),
-        glm::vec3(0, 0, 0),
-        glm::vec3(0.1, 0.1, 0.1),
-        glm::vec3(0.8, 0.8, 0.8),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
         glm::vec3(0, 0, 0)
     );
 
@@ -92,11 +58,18 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		.build()
 	);
 
+	Material* material = new Material(
+		glm::vec3(0.1f, 0.6f, 0.1f),
+		glm::vec3(0.5f, 0.5f, 0.5f),
+		glm::vec3(0.5f, 0.5f, 0.5f),
+		glm::vec3(0.8f, 0.8f, 0.8f)
+	);
 	this->setSkybox(skybox);
 
 	objects["login"] = new DrawableObject(
 		ModelFactory::createModel("login"),
 		shader,
+		material,
 		TransformBuilder()
 		.rotate(1.57, 3.14, 0.8)
 		.translate(40.0f, 0, 80.0)
@@ -126,6 +99,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		objects[treeIndex] = new DrawableObject(
 			ModelFactory::createModel("tree"),
 			shader,
+			material,
 			TransformBuilder()
 			.scale(scale)
 			.rotate(0, rotationY, 0)
@@ -146,6 +120,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		objects[bushIndex] = new DrawableObject(
 			ModelFactory::createModel("bush"),
 			shader,
+			material,
 			TransformBuilder()
 			.translate(x, y, z)
 			.scale(scale)
@@ -186,11 +161,11 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		.build()
 	);
 
-	// this->setLight(pointLight);
+	this->setLight(pointLight);
 	this->setLight(firefly1);
 	this->setLight(firefly2);
-	this->setLight(light);
-	// this->setLight(light2);
+	//this->setLight(light);
+	//this->setLight(light2);
 	this->setLight(light3);
 	// light->setPosition(glm::vec3(0.0, 0.0, 0.0));
 }

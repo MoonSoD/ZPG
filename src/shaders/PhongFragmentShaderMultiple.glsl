@@ -10,7 +10,6 @@ struct Light {
     
     vec3 position;          
     vec3 direction;    
-    vec3 color;   
 
     float constantAttenuation; 
     float linearAttenuation;   
@@ -47,7 +46,7 @@ void main(void) {
     for (int i = 0; i < 4; i++) {  
         Light currentLight = light[i];
 
-        float attenuation = 0.5;
+        float attenuation = 1.0;
 
         if (currentLight.type == 1) {
             float distance = length(currentLight.position - vec3(ex_worldPos));
@@ -76,7 +75,7 @@ void main(void) {
 
         vec3 norm = normalize(ex_worldNorm); 
         float diffIntensity = max(dot(lightVector, norm), 0.0);
-        diffuse += r_d * diffIntensity * currentLight.color * attenuation;
+        diffuse += r_d * diffIntensity * objectColor * attenuation;
 
         float specularStrength = 0.5; 
         float shininess = 32.0;      

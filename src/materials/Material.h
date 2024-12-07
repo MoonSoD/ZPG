@@ -9,6 +9,8 @@ private:
     glm::vec3 diffuse = glm::vec3(1.0f);
     glm::vec3 specular = glm::vec3(1.0f);
 
+    glm::vec3 color = glm::vec3(1.0f);
+
     Texture* texture = nullptr;
 
 public:
@@ -18,9 +20,14 @@ public:
 
     Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 
+    Material(glm::vec3 color);
+
+    Material(glm::vec3 color, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
+
     glm::vec3 getAmbient();
     glm::vec3 getDiffuse();
     glm::vec3 getSpecular();
+    glm::vec3 getColor();
 
     void bindTexture();
 };

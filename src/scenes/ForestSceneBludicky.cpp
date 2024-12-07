@@ -18,23 +18,13 @@ ForestSceneBludicky::ForestSceneBludicky(GLFWwindow* window, Camera* camera, Con
     auto light = new Light(
 		1,
         glm::vec3(0, 5, 0),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(1, 1, 1),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0)
+        glm::vec3(1, 1, 1)
     );
 
 	auto light2 = new Light(
 		1,
         glm::vec3(20, 5, 0),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(1, 1, 1),
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.385, 0.647, 0.812),
-        glm::vec3(0, 0, 0)
+        glm::vec3(1, 1, 1)
     );
 
 

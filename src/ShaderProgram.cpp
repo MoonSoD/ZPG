@@ -81,18 +81,12 @@ void ShaderProgram::updateLight(Light* light, int lightIndex) {
 	glUniform1i(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].type").c_str()), light->getType()); 
 	glUniform3fv(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].position").c_str()), 1, glm::value_ptr(light->getPosition()));
 	glUniform3fv(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].direction").c_str()), 1, glm::value_ptr(light->getDirection()));
-	glUniform3fv(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].ambient").c_str()), 1, glm::value_ptr(light->getAmbient()));
-	glUniform3fv(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].diffuse").c_str()), 1, glm::value_ptr(light->getDiffuse()));
-	glUniform3fv(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].specular").c_str()), 1, glm::value_ptr(light->getSpecular()));
-	glUniform3fv(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].color").c_str()), 1, glm::value_ptr(light->getColor()));
 
 	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].constantAttenuation").c_str()), light->getConstantAttenuation());
 	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].linearAttenuation").c_str()), light->getLinearAttenuation());
 	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].quadraticAttenuation").c_str()), light->getQuadraticAttenuation());
 
 	glUniform1f(glGetUniformLocation(id, ("light[" + std::to_string(lightIndex) + "].cutoffAngle").c_str()), light->getCutoffAngle());
-
-	glUniform3fv(glGetUniformLocation(id, "objectColor"), 1, glm::value_ptr(light->getColor()));
 
 	glUseProgram(0);
 }
@@ -122,14 +116,16 @@ void ShaderProgram::applyMaterial(Material* material) {
 	auto ambient = glm::vec3(1.0f);
 	auto diffuse = glm::vec3(1.0f);
 	auto specular = glm::vec3(1.0f);
+	auto color = glm::vec3(1.0f);
 
 	if (material != nullptr) {
 		ambient = material->getAmbient();
 		diffuse = material->getDiffuse();
 		specular = material->getSpecular();
+		color = material->getColor();
 	}
-	
 
+	GLint idColor = glGetUniformLocation(id, "objectColor");
 	GLint idAmbient = glGetUniformLocation(id, "r_a");
 	GLint idDiffuse = glGetUniformLocation(id, "r_d");
 	GLint idSpecular = glGetUniformLocation(id, "r_s");
@@ -138,6 +134,7 @@ void ShaderProgram::applyMaterial(Material* material) {
 		return;
 	}
 
+	glUniform3fv(idColor, 1, glm::value_ptr(color)); 
 	glUniform3fv(idAmbient, 1, glm::value_ptr(ambient));
 	glUniform3fv(idDiffuse, 1, glm::value_ptr(diffuse));
 	glUniform3fv(idSpecular, 1, glm::value_ptr(specular));

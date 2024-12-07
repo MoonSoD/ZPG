@@ -9,30 +9,18 @@ void Light::notifyObservers() {
     }
 }
 
-Light::Light(const int type,const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition)
-    : type(type), position(position), direction(direction), ambient(ambient), diffuse(diffuse), specular(specular), color(color), cameraPosition(cameraPosition) {
+Light::Light(const int type,const glm::vec3& position, const glm::vec3& direction)
+    : type(type), position(position), direction(direction) {
     notifyObservers();
 }
 
-Light::Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition, float cutoffAngle)
-    : type(type), position(position), direction(direction), ambient(ambient), diffuse(diffuse), specular(specular), color(color), cameraPosition(cameraPosition), cutoffAngle(cutoffAngle) {
+Light::Light(const int type, const glm::vec3& position, const glm::vec3& direction, float cutoffAngle)
+    : type(type), position(position), direction(direction), cutoffAngle(cutoffAngle) {
     notifyObservers();
 }
 
 int Light::getType() {
     return this->type;
-}
-
-glm::vec3& Light::getAmbient() {
-    return this->ambient;
-}
-
-glm::vec3& Light::getDiffuse() {
-    return this->diffuse;
-}
-
-glm::vec3& Light::getSpecular() {
-    return this->specular;
 }
 
 glm::vec3& Light::getPosition() {
@@ -41,10 +29,6 @@ glm::vec3& Light::getPosition() {
 
 glm::vec3& Light::getDirection() {
     return this->direction;
-}
-
-glm::vec3& Light::getColor() {
-    return this->color;
 }
 
 float Light::getConstantAttenuation() {
@@ -63,21 +47,6 @@ float Light::getCutoffAngle() {
     return this->cutoffAngle;
 }
 
-void Light::setAmbient(const glm::vec3& ambient) {
-    this->ambient = ambient;
-    notifyObservers();
-}
-
-void Light::setDiffuse(const glm::vec3& diffuse) {
-    this->diffuse = diffuse;
-    notifyObservers();
-}
-
-void Light::setSpecular(const glm::vec3& specular) {
-    this->specular = specular;
-    notifyObservers();
-}
-
 void Light::setPosition(const glm::vec3& position) {
     this->position = position;
     notifyObservers();
@@ -85,11 +54,6 @@ void Light::setPosition(const glm::vec3& position) {
 
 void Light::setDirection(const glm::vec3& direction) {
     this->direction = direction;
-    notifyObservers();
-}
-
-void Light::setColor(const glm::vec3& color) {
-    this->color = color;
     notifyObservers();
 }
 

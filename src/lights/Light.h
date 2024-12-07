@@ -16,11 +16,7 @@ private:
 
     //pos, attenuation, direction, color
 
-    int type = 0; // 0 = point, 1 = directional
-
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
+    int type = 1; // 1 = point, 2 = directional, 3 = spot
 
     glm::vec3 position;
     glm::vec3 direction;
@@ -41,8 +37,8 @@ private:
     std::unordered_map<std::string, std::unique_ptr<Transformation>> transforms;
 
 public:
-    Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition);
-    Light(const int type, const glm::vec3& position, const glm::vec3& direction, const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular, const glm::vec3& color, const glm::vec3& cameraPosition, float cutoffAngle);
+    Light(const int type, const glm::vec3& position, const glm::vec3& direction );
+    Light(const int type, const glm::vec3& position, const glm::vec3& direction, float cutoffAngle);
     int getType();
 
     glm::vec3& getAmbient();
@@ -51,8 +47,6 @@ public:
     
     glm::vec3& getPosition();
     glm::vec3& getDirection();
-
-    glm::vec3& getColor();
 
     float getConstantAttenuation();
     float getLinearAttenuation();
@@ -66,8 +60,6 @@ public:
 
     void setPosition(const glm::vec3& position);
     void setDirection(const glm::vec3& direction);
-
-    void setColor(const glm::vec3& color);
 
     void addObserver(Scene* scene);
 
