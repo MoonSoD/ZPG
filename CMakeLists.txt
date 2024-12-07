@@ -98,6 +98,7 @@ add_executable(zpgproj
     src/models/SphereModel.cpp
     src/models/TreeModel.cpp
     src/models/TriangleModel.cpp
+    src/models/ModelFactory.cpp
 )
 
 # Include the GLFW, GLM, and GLEW directories

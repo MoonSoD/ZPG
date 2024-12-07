@@ -1,11 +1,5 @@
 #include "ForestScene.h"
-#include "../models/PlainModel.h"
-#include "../models/TreeModel.h"
-#include "../models/BushModel.h"
-#include "../models/Skybox.h"
-#include "../models/HouseModel.h"
-#include "../models/LoginModel.h"
-#include "../models/ZombieModel.h"
+#include "../models/ModelFactory.h"
 #include "../transformations/TransformBuilder.h"
 #include "../lights/PointLight.h"
 
@@ -92,7 +86,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
     );
 
 	auto skybox = new DrawableObject(
-		new Skybox(),
+		ModelFactory::createModel("skybox"),
 		skyShader,
 		TransformBuilder()
 		.build()
@@ -101,7 +95,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	this->setSkybox(skybox);
 
 	objects["login"] = new DrawableObject(
-		new LoginModel(),
+		ModelFactory::createModel("login"),
 		shader,
 		TransformBuilder()
 		.rotate(1.57, 3.14, 0.8)
@@ -130,7 +124,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		std::string treeIndex = "tree_" + std::to_string(i);
 
 		objects[treeIndex] = new DrawableObject(
-			new TreeModel(),
+			ModelFactory::createModel("tree"),
 			shader,
 			TransformBuilder()
 			.scale(scale)
@@ -150,7 +144,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		std::string bushIndex = "bush_" + std::to_string(i);
 
 		objects[bushIndex] = new DrawableObject(
-			new BushModel(),
+			ModelFactory::createModel("bush"),
 			shader,
 			TransformBuilder()
 			.translate(x, y, z)
@@ -162,7 +156,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	}
 
 	objects["house"] = new DrawableObject(
-		new HouseModel(),
+		ModelFactory::createModel("house"),
 		shader,
 		new Material(new Texture("./src/models/definitions/house/house.png")),
 		TransformBuilder()
@@ -172,7 +166,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 	);
 
 	objects["zombie"] = new DrawableObject(
-		new ZombieModel(),
+		ModelFactory::createModel("zombie"),
 		blinn,
 		new Material(new Texture("./src/models/definitions/zombie/zombie.png")),
 		TransformBuilder()
@@ -183,7 +177,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 
 
 	objects["ground"] = new DrawableObject(
-		new PlainModel(),
+		ModelFactory::createModel("plain"),
 		shader,
 		new Material(new Texture("./src/textures/grass.png")),
 		TransformBuilder()
