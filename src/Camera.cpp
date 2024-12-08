@@ -109,17 +109,22 @@ void Camera::rotateRight(float angle) {
 
 void Camera::rotateUp(float angle) {
     this->alpha += glm::radians(angle);
-    if (this->alpha >= glm::radians(180.0f)) {
-        this->alpha = glm::radians(180.0f);
+    if (this->alpha >= glm::radians(179.0f)) {
+        this->alpha = glm::radians(179.0f);
     }
+
+    if (this->alpha <= glm::radians(1.0f)) {
+        this->alpha = glm::radians(1.0f);
+    }
+
     updateTarget();
     this->recalculateViewMatrix();
 }
 
 void Camera::rotateDown(float angle) {
     this->alpha -= glm::radians(angle);
-    if (this->alpha <= glm::radians(-89.0f)) {
-        this->alpha = glm::radians(-89.0f);
+    if (this->alpha <= glm::radians(-80.0f)) {
+        this->alpha = glm::radians(-80.0f);
     }
     updateTarget();
     this->recalculateViewMatrix();
