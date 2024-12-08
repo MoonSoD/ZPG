@@ -34,37 +34,48 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
     });
 
     glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mode) {
-        if (button != GLFW_MOUSE_BUTTON_LEFT || action == GLFW_PRESS) {
+        if (button != GLFW_MOUSE_BUTTON_LEFT || action != GLFW_PRESS) {
             return;
         }
 
         Controller* controller = static_cast<Controller*>(glfwGetWindowUserPointer(window));
-     
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
+
+        int frameWidth, frameHeight;
+        glfwGetFramebufferSize(window, &frameWidth, &frameHeight);
+
+        int windowWidth, windowHeight;
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+        float scaleX = static_cast<float>(frameWidth) / static_cast<float>(windowWidth);
+        float scaleY = static_cast<float>(frameHeight) / static_cast<float>(windowHeight);
+
         GLbyte color[4];
         GLfloat depth;
         GLuint index;
 
-        double x,y;
+        double x, y;
         glfwGetCursorPos(window, &x, &y);
 
-        int newy = height - static_cast<int>(y) - 10;
-        
-        glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
-        glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
-        glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
-        //printf("Clicked on pixel %.2f, %.2f, color %02hhx%02hhx%02hhx%02hhx, depth % f, stencil index % u\n", x, y, color[0], color[1], color[2], color[3], depth, index);
+        float scaledX = x * scaleX;
+        float scaledY = y * scaleY;
 
-        glm::vec4 viewport = glm::vec4(0, 0, width, height);
-        glm::vec3 windowCoords = glm::vec3(x, newy, depth);
+        int newy = frameHeight - static_cast<int>(scaledY) - 1;
+
+        glReadPixels(static_cast<int>(scaledX), newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+        glReadPixels(static_cast<int>(scaledX), newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+        glReadPixels(static_cast<int>(scaledX), newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+
+        // printf("Clicked on pixel %.2f, %.2f, color %02hhx%02hhx%02hhx%02hhx, depth %f, stencil index %u\n", x, y, color[0], color[1], color[2], color[3], depth, index);
+
+        glm::vec4 viewport = glm::vec4(0, 0, frameWidth, frameHeight);
+        glm::vec3 windowCoords = glm::vec3(scaledX, newy, depth);
 
         glm::vec3 p = glm::unProject(windowCoords, controller->camera->getViewMatrix(), controller->camera->getProjectMatrix(), viewport);
 
         controller->getScene()->growTree(p.x, p.y, p.z);
 
-        printf("Local coords: %f, %d, d:%f - ", x, newy, depth);
-        printf("Global coords: %f, %f, %f\n", p.x, p.y, p.z);
+        printf("Local coords: %.2f, %.2f, d:%f - ", x, newy, depth);
+        printf("Global coords: %.2f, %.2f, %.2f\n", p.x, p.y, p.z);
     });
 
     glfwSetWindowUserPointer(window, this);
