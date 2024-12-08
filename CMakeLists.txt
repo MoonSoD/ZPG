@@ -81,7 +81,6 @@ add_executable(zpgproj
     src/Shader.cpp
     src/ShaderLoader.cpp
     src/ShaderProgram.cpp
-    src/SquareDrawableObject.cpp
     src/transformations/TransformBuilder.cpp
     src/transformations/Transformation.cpp
     src/scenes/Scene.cpp

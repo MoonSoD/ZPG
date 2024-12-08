@@ -8,6 +8,9 @@
 #include "../Camera.h"
 #include "../Controller.h"
 
+
+class Controller;
+
 class Light;
 
 class Scene
@@ -21,6 +24,7 @@ protected:
 	int frames = 0;
 	int updatesFrequency = 60;
 	DrawableObject* skybox;
+	ShaderProgram* shader;
 
 public:
 	Scene(GLFWwindow* window, Camera* camera, Controller* controller);
@@ -39,5 +43,10 @@ public:
 	void setSkybox(DrawableObject* skybox);
 
 	void renderSkybox();
+
+	virtual void growTree(float translateX, float translateY, float translateZ);
+
+	ShaderProgram* getShader();
+	void setShader(ShaderProgram* shader);
 };
 

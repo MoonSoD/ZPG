@@ -56,6 +56,7 @@ void main(void) {
 
         if (currentLight.type == 2) {
             lightVector = normalize(-currentLight.direction);  
+            attenuation = 1.0;
         }
         
         if (currentLight.type == 3) {

@@ -9,6 +9,8 @@ private:
 public:
 	ForestScene(GLFWwindow* window, Camera* camera, Controller* controller);
 
-	void render();
+	void growTree(float translateX, float translateY, float translateZ) override;
+
+	void render() override;
 };
 

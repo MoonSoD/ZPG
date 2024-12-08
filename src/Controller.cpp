@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include "./scenes/ForestScene.h"
 
 Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), camera(camera), lastX(400.0f), lastY(300.0f), isFirstMovement(true) {
     glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y) {
@@ -33,14 +34,18 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
     });
 
     glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mode) {
+        if (button != GLFW_MOUSE_BUTTON_LEFT || action == GLFW_PRESS) {
+            return;
+        }
+
         Controller* controller = static_cast<Controller*>(glfwGetWindowUserPointer(window));
      
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         GLbyte color[4];
         GLfloat depth;
-        GLuint index; // identifikace tělesa
-        //hodnota horneho pruhu
+        GLuint index;
+
         double x,y;
         glfwGetCursorPos(window, &x, &y);
 
@@ -49,7 +54,17 @@ Controller::Controller(GLFWwindow* window, Camera* camera) : window(window), cam
         glReadPixels(x, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
         glReadPixels(x, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
         glReadPixels(x, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
-        printf("Clicked on pixel %d, %d, color %02hhx%02hhx%02hhx%02hhx, depth % f, stencil index % u\n", x, y, color[0], color[1], color[2], color[3], depth, index);
+        //printf("Clicked on pixel %.2f, %.2f, color %02hhx%02hhx%02hhx%02hhx, depth % f, stencil index % u\n", x, y, color[0], color[1], color[2], color[3], depth, index);
+
+        glm::vec4 viewport = glm::vec4(0, 0, width, height);
+        glm::vec3 windowCoords = glm::vec3(x, newy, depth);
+
+        glm::vec3 p = glm::unProject(windowCoords, controller->camera->getViewMatrix(), controller->camera->getProjectMatrix(), viewport);
+
+        controller->getScene()->growTree(p.x, p.y, p.z);
+
+        printf("Local coords: %f, %d, d:%f - ", x, newy, depth);
+        printf("Global coords: %f, %f, %f\n", p.x, p.y, p.z);
     });
 
     glfwSetWindowUserPointer(window, this);
@@ -99,4 +114,12 @@ int Controller::getSceneId() {
 
 void Controller::setSceneId(int sceneId) {
     this->sceneId = sceneId;
+}
+
+Scene* Controller::getScene() {
+    return this->scene;
+}
+
+void Controller::setScene(Scene* scene) {
+    this->scene = scene;
 }

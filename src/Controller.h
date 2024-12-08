@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Camera.h"
+#include "./scenes/Scene.h"
 
 class Controller {
 private:
@@ -11,6 +12,7 @@ private:
     float lastX, lastY;
     bool isFirstMovement;
     int sceneId = 1;
+    Scene* scene = nullptr;
 public:
     Controller(GLFWwindow* window, Camera* camera);
     void processInput();
@@ -18,6 +20,9 @@ public:
 
     int getSceneId();
     void setSceneId(int sceneId);
+
+    Scene* getScene();
+    void setScene(Scene* scene);
 
     bool getIsSkyboxLocked() { return this->camera->getIsSkyboxLocked(); }
 };

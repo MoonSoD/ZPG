@@ -100,6 +100,8 @@ public:
 		scenes.push_back(multipleShaderScene);
 		scenes.push_back(basicScene);
 		scenes.push_back(forestSceneBludicky);
+
+		controller->setScene(forestScene);
 		printf("Scenes created\n");
 	}
 
@@ -111,13 +113,16 @@ public:
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			auto sceneId = controller->getSceneId();
+			controller->setScene(scenes[sceneId]);
 
-			scenes[sceneId]->renderSkybox();
+			auto scene = controller->getScene();
+
+			scene->renderSkybox();
 			if (!controller->getIsSkyboxLocked()) {
 				glClear(GL_DEPTH_BUFFER_BIT);
 			} 
 
-			scenes[sceneId]->render();
+			scene->render();
 
 			glfwPollEvents(); //don't call after clearing the buffer!!
 			glfwSwapBuffers(window);

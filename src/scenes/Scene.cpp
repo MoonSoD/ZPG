@@ -39,3 +39,13 @@ void Scene::renderSkybox() {
         skybox->draw(true);
     }
 }
+
+void Scene::growTree(float translateX, float translateY, float translateZ) {}
+
+ShaderProgram* Scene::getShader() {
+    return this->shader;
+}
+
+void Scene::setShader(ShaderProgram* shader) {
+    this->shader = shader;
+}

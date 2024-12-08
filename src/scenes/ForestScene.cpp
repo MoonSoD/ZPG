@@ -10,7 +10,7 @@
 #include <math.h>
 
 ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* controller) : Scene(window, camera, controller) {
-	auto shader = new ShaderProgram("src/shaders/PhongVertexShader.glsl", "src/shaders/PhongFragmentShaderMultiple.glsl");
+	shader = new ShaderProgram("src/shaders/PhongVertexShader.glsl", "src/shaders/PhongFragmentShaderMultiple.glsl");
 	shader->setCamera(this->getCamera());
 
 	auto skyShader = new ShaderProgram("src/shaders/SkyboxVertexShader.glsl", "src/shaders/SkyboxFragmentShader.glsl");
@@ -27,7 +27,7 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
     );
 
 	auto light2 = new DirectionalLight(
-        glm::vec3(0, -1, 0)
+        glm::vec3(-1, 1, 0)
     );
 
 	Light* light3 = new SpotLight(
@@ -60,9 +60,9 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 
 	Material* material = new Material(
 		glm::vec3(0.1f, 0.6f, 0.1f),
-		glm::vec3(0.5f, 0.5f, 0.5f),
-		glm::vec3(0.5f, 0.5f, 0.5f),
-		glm::vec3(0.8f, 0.8f, 0.8f)
+		glm::vec3(1.0f, 1.0f, 1.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f)
 	);
 	this->setSkybox(skybox);
 
@@ -140,16 +140,38 @@ ForestScene::ForestScene(GLFWwindow* window, Camera* camera, Controller* control
 		.build()
 	);
 
+	auto zombieMaterial = new Material(new Texture("./src/models/definitions/zombie/zombie.png"));
+	auto zombieModel = ModelFactory::createModel("zombie");
+
 	objects["zombie"] = new DrawableObject(
-		ModelFactory::createModel("zombie"),
+		zombieModel,
 		blinn,
-		new Material(new Texture("./src/models/definitions/zombie/zombie.png")),
+		zombieMaterial,
 		TransformBuilder()
 		.translate(0.0, 0, 8.0)
 		.rotate(0, 1.57, 0)
 		.build()
 	);
 
+	objects["zombie2"] = new DrawableObject(
+		zombieModel,
+		shader,
+		zombieMaterial,
+		TransformBuilder()
+		.translate(1.0, 0, 8.0)
+		.rotate(0, 1.57, 0)
+		.build()
+	);
+
+	objects["zombie3"] = new DrawableObject(
+		zombieModel,
+		shader,
+		zombieMaterial,
+		TransformBuilder()
+		.translate(-1.0, 0, -20.0)
+		.rotate(0, 1.57, 0)
+		.build()
+	);
 
 	objects["ground"] = new DrawableObject(
 		ModelFactory::createModel("plain"),
@@ -196,7 +218,7 @@ void ForestScene::render() {
 
     for (auto& obj : objects) {
         if (obj.first.find("tree") != std::string::npos) {
-			obj.second->setTransform("r0", Transformation::rotate(0, rotation, 0));  
+			//obj.second->setTransform("r0", Transformation::rotate(0, rotation, 0));  
         }
 	
 		glStencilFunc(GL_ALWAYS, rand() % 100, 0xFF);
@@ -209,3 +231,16 @@ void ForestScene::render() {
     }
 }
 
+void ForestScene::growTree(float translateX, float translateY, float translateZ) {
+	auto treeIndex = "tree_grown_" + std::to_string(rand() % 100);
+
+	printf("Growing tree at %f, %f, %f\n", translateX, translateY, translateZ);
+
+	objects[treeIndex] = new DrawableObject(
+		ModelFactory::createModel("tree"),
+		shader,
+		TransformBuilder()
+		.translate(translateX, 0, translateZ)
+		.build()
+	);
+}

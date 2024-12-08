@@ -21,7 +21,7 @@ void main()
 {
 	vt_out = uv;
 	ex_worldPos = modelMatrix * vec4 ( vp ,1.0);
-	mat4 normal = transpose(inverse(modelMatrix));// problem - priste vysvetlime
+	mat4 normal = transpose(inverse(modelMatrix));
 	ex_worldNorm = vec3 (normal * vec4 (vn, 1.0));
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4 (vp, 1.0);
     fragPosition = vp;
